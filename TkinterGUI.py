@@ -1,9 +1,6 @@
 import tkinter as tk
 from tkinter import *
-from Tiles import WeatherTile
-
-
-
+from Tiles import *
 
 class GUI():
     def __init__(self):
@@ -18,10 +15,7 @@ class GUI():
         
         weather = WeatherTile(self.window, self.width, self.height, 0, 0, 2, 3)
 
-        self.baseTile2 = self.makeFrame("blue")
-        self.baseTile2.pack_propagate(False)
-        self.baseTile2.grid(row = 0, column = 1, sticky= "nsew")
-        self.addLabel(self.baseTile2, "Red")
+        spotify = SpotifyTile(self.window, self.width, self.height, 0, 1, 2, 3)
 
         self.baseTile3 = self.makeFrame("purple")
         self.baseTile3.pack_propagate(False)

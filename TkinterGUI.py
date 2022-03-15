@@ -1,6 +1,8 @@
 import tkinter as tk
 from tkinter import *
 from Tiles import *
+import threading
+import time
 
 class GUI():
     def __init__(self):
@@ -16,8 +18,9 @@ class GUI():
         weather = WeatherTile(self.window, self.width, self.height, 0, 0, 2, 3)
 
         spotify = SpotifyTile(self.window, self.width, self.height, 0, 1, 2, 3)
-
-        photo = PhotoTile(self.window, self.width, self.height, 0, 2, 2, 3)
+        
+        threading.Thread(target=self.photo_thread).start()
+        #photo = PhotoTile(self.window, self.width, self.height, 0, 2, 2, 3)
 
         self.baseTile4 = self.makeFrame("purple")
         self.baseTile4.pack_propagate(False)
@@ -37,6 +40,9 @@ class GUI():
         self.window.geometry(str(self.width) + "x" + str(self.height))
 
         self.window.mainloop()
+    
+    def photo_thread(self):
+        photo = PhotoTile(self.window, self.width, self.height, 0, 2, 2, 3)
 
     def makeFrame(self, color):
         

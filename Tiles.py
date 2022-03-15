@@ -2,6 +2,9 @@ import tkinter as tk
 from tkinter import *
 from PIL import Image,ImageTk
 from API.PhotosAPI import PhotosAPI
+import threading
+import time
+import datetime
 
 class Tile():
     def __init__(self, window, width, height, row, column, rows, columns):
@@ -86,18 +89,36 @@ class PhotoTile(Tile):
         self.column = column
         self.rows = rows
         self.columns = columns
+        self.startTime = datetime.datetime.now().time()
         self.api = PhotosAPI()
         self.photos = self.api.getPhotos()
         self.setup()
         self.addPhoto()
+        self.loop()
 
         
     def addPhoto(self):
-        img = Image.open("image.png")
-        resized_image= img.resize((250, 250))
-        new_image = ImageTk.PhotoImage(self.photos[1])
-        l1 = Label(self.frame, image=new_image)
-        l1.image = new_image
-        l1.pack()
+        new_image = ImageTk.PhotoImage(self.photos[0])
+        self.l1 = Label(self.frame, image=new_image)
+        self.l1.image = new_image
+        self.l1.pack()
         Label(self.frame, text="Happier - Marshmellow", bg=self.color, fg=self.forColor).pack()
+
+    #def elapsedTime(self):
+        #if datetime.datetime.now().time() - self.startTime >= 
+    
+    def loop(self):
+        counter = 1
+        while(1 == 1):
+            time.sleep(5)
+            new_image = ImageTk.PhotoImage(self.photos[counter])
+            self.l1.configure(image=new_image)
+            self.l1.image = new_image
+            if counter + 1 == len(self.photos):
+                counter = 0
+            else:
+                counter += 1
+
+#print(datetime.datetime.now().time() - self.startTime)
+
         

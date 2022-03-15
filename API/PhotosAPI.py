@@ -51,7 +51,7 @@ class PhotosAPI():
         self.photos = []
 
         for url in self.base_urls:
-            image_url = "{}=w200-h200".format(url)
+            image_url = "{}=w275-h300".format(url)
             image_bytes = urlopen(image_url).read()
             #img = PILImage.open(io.BytesIO(image_bytes))
             self.photos.append(PILImage.open(io.BytesIO(image_bytes)))

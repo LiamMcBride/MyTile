@@ -9,7 +9,8 @@ from gphotospy.authorize import get_credentials
 import PIL.Image as PILImage
 from PIL import ImageTk
 
-CLIENT_SECRET_FILE = "C:/Users/liamm/Desktop/MyTile/API/credentials.json"
+#CLIENT_SECRET_FILE = "C:/Users/liamm/Desktop/MyTile/API/credentials.json"
+CLIENT_SECRET_FILE = "C:/Users/liamm/OneDrive/Desktop/MyTile/API/credentials.json"
 
 
 class PhotosAPI():

@@ -68,13 +68,22 @@ class SpotifyTile(Tile):
         self.columns = columns
         self.setup()
         self.addPhoto()
+        self.loop()
     
     def addPhoto(self):
         img = Image.open("image.png")
         resized_image= img.resize((250, 250))
         new_image= ImageTk.PhotoImage(resized_image)
         Label(self.frame, image=new_image).pack()
-        Label(self.frame, text="Happier - Marshmellow", bg=self.color, fg=self.forColor).pack()
+        self.l1 = Label(self.frame, text="Happier - Marshmellow", bg=self.color, fg=self.forColor).pack()
+
+    def loop(self):
+        
+        while(1 == 1):
+            time.sleep(2)
+            self.l1.text = "Hi"
+            time.sleep(2)
+            self.l1.text = "bye"
 
 class PhotoTile(Tile):
     

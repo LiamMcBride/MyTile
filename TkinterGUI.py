@@ -17,7 +17,8 @@ class GUI():
         
         weather = WeatherTile(self.window, self.width, self.height, 0, 0, 2, 3)
 
-        spotify = SpotifyTile(self.window, self.width, self.height, 0, 1, 2, 3)
+        #spotify = SpotifyTile(self.window, self.width, self.height, 0, 1, 2, 3)
+        threading.Thread(target=self.spotify_thread).start()
         
         threading.Thread(target=self.photo_thread).start()
         #photo = PhotoTile(self.window, self.width, self.height, 0, 2, 2, 3)
@@ -43,6 +44,9 @@ class GUI():
     
     def photo_thread(self):
         photo = PhotoTile(self.window, self.width, self.height, 0, 2, 2, 3)
+    
+    def spotify_thread(self):
+        spotify = SpotifyTile(self.window, self.width, self.height, 0, 1, 2, 3)
 
     def makeFrame(self, color):
         

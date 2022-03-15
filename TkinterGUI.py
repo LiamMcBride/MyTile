@@ -17,10 +17,7 @@ class GUI():
 
         spotify = SpotifyTile(self.window, self.width, self.height, 0, 1, 2, 3)
 
-        self.baseTile3 = self.makeFrame("purple")
-        self.baseTile3.pack_propagate(False)
-        self.baseTile3.grid(row = 0, column = 2, sticky= "nsew")
-        self.addLabel(self.baseTile3, "Red")
+        photo = PhotoTile(self.window, self.width, self.height, 0, 2, 2, 3)
 
         self.baseTile4 = self.makeFrame("purple")
         self.baseTile4.pack_propagate(False)

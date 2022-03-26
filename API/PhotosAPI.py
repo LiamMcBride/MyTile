@@ -8,13 +8,17 @@ from tkinter import *
 from gphotospy.authorize import get_credentials
 import PIL.Image as PILImage
 from PIL import ImageTk
+import datetime
 
 #CLIENT_SECRET_FILE = "C:/Users/liamm/Desktop/MyTile/API/credentials.json"
 CLIENT_SECRET_FILE = "C:/Users/liamm/OneDrive/Desktop/MyTile/API/credentials.json"
 
+ALBUM_NAME = "MyTile Album"
+
 
 class PhotosAPI():
     def __init__(self):
+        self.dates = []
         self.start()
 
     def start(self):
@@ -22,6 +26,7 @@ class PhotosAPI():
         self.findAlbum()
         self.getURLs()
         self.createImages()
+       
     
     def autorize(self):
         self.service = authorize.init(CLIENT_SECRET_FILE)
@@ -33,13 +38,27 @@ class PhotosAPI():
         album_iterator = album_manager.list()
         first_album = next(album_iterator)
 
-        while(first_album.get("title") != "MyTile Album"):
+        while(first_album.get("title") != ALBUM_NAME):
             first_album = next(album_iterator)
 
-        self.album_id = first_album.get("id")
+        self.album_id = first_album.get("id")   
+
+    def createDatesArray(self, date):
+        dateFormat = "%Y-%m-%dT%H:%M:%SZ"
+        correctDate = (datetime.datetime.strptime(date, dateFormat))
+
+        outputFormat = "%d %b, %Y"
+
+        self.dates.append(correctDate.strftime(outputFormat))
 
     def getURLs(self):
         media_manager = Media(self.service)
+
+        media_iterator = media_manager.list()
+
+        media_id = next(media_iterator).get("id")
+
+        print(media_manager.get(media_id))
 
         album_media_list = list(media_manager.search_album(self.album_id))
 
@@ -47,6 +66,8 @@ class PhotosAPI():
 
         for media in album_media_list:
             self.base_urls.append(media.get("baseUrl"))
+            date = str(media.get("mediaMetadata").get("creationTime"))
+            self.createDatesArray(date)
 
     def createImages(self):
         self.photos = []
@@ -54,31 +75,13 @@ class PhotosAPI():
         for url in self.base_urls:
             image_url = "{}=w275-h300".format(url)
             image_bytes = urlopen(image_url).read()
-            #img = PILImage.open(io.BytesIO(image_bytes))
             self.photos.append(PILImage.open(io.BytesIO(image_bytes)))
-            #self.photos.append(ImageTk.PhotoImage(img))
     
     def getPhotos(self):
         return self.photos
+
+    def getDates(self):
+        return self.dates
             
-            
-
-
-# root = Tk()
-
-# canvas = Canvas(root, width=600, height=400, bg="white")
-# #512 341
-# canvas.pack(side="top", fill="both", expand="yes")
-
-# image_url = "{}=w512-h341".format(base_url)
-
-# image_bytes = urlopen(image_url).read()
-
-# img = PILImage.open(io.BytesIO(image_bytes))
-
-# photo = ImageTk.PhotoImage(img)
-# canvas.create_image(10,10, image=photo, anchor="nw")
-
-# root.mainloop()
 
 api = PhotosAPI()

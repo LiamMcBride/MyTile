@@ -10,8 +10,8 @@ import PIL.Image as PILImage
 from PIL import ImageTk
 import datetime
 
-#CLIENT_SECRET_FILE = "C:/Users/liamm/Desktop/MyTile/API/credentials.json"
-CLIENT_SECRET_FILE = "C:/Users/liamm/OneDrive/Desktop/MyTile/API/credentials.json"
+CLIENT_SECRET_FILE = "C:/Users/liamm/Desktop/MyTile/API/credentials.json"
+#CLIENT_SECRET_FILE = "C:/Users/liamm/OneDrive/Desktop/MyTile/API/credentials.json"
 
 ALBUM_NAME = "MyTile Album"
 
@@ -47,7 +47,7 @@ class PhotosAPI():
         dateFormat = "%Y-%m-%dT%H:%M:%SZ"
         correctDate = (datetime.datetime.strptime(date, dateFormat))
 
-        outputFormat = "%d %b, %Y"
+        outputFormat = "%B %d, %Y"
 
         self.dates.append(correctDate.strftime(outputFormat))
 
@@ -58,7 +58,7 @@ class PhotosAPI():
 
         media_id = next(media_iterator).get("id")
 
-        print(media_manager.get(media_id))
+        # print(media_manager.get(media_id))
 
         album_media_list = list(media_manager.search_album(self.album_id))
 

@@ -24,11 +24,7 @@ class SpotifyAPI():
             return "No Song Playing", "None", "None"
         artist = results["item"]["artists"][0]['name']
         song = results["item"]['name']
-        photoArt = results["item"]["album"]["images"][0]
-
-        photoArt = photoArt["url"]
-
-        #print(photoArt)
+        photoArt = results["item"]["album"]["images"][0]["url"]
 
         return song, artist, (photoArt)
 

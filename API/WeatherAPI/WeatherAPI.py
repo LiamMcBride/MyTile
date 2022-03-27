@@ -11,7 +11,3 @@ class WeatherAPI():
     def getWeatherData(self):
         request_url = self.base_url + "/" + self.request_type + self.api_key + "&q=" + self.zip_code + "&days=1"
         return requests.get(request_url).json()
-
-api = WeatherAPI()
-
-print(api.getWeatherData())

@@ -14,10 +14,12 @@ import base64
 import urllib
 import io
 import threading
-
+import requests
 class Tile():
     def __init__(self, window, width, height, row, column, rows, columns):
         self.title = "Tile"
+        self.fontSize = 18
+        self.fontType = "arial"
         self.window = window
         self.width = width
         self.height = height
@@ -42,12 +44,14 @@ class Tile():
         return frame
     
     def addLabel(self, frame, title):
-        label = tk.Label(master=frame, text=title, bg=self.color, fg=self.forColor)
+        label = tk.Label(master=frame, text=title, font=(self.fontType, 25), bg=self.color, fg=self.forColor)
         label.pack(padx=6, pady=10)
 
 class WeatherTile(Tile):
     #I want to dynamically change the background color to reflect time of day/weather
     def __init__(self, window, width, height, row, column, rows, columns):
+        self.fontSize = 18
+        self.fontType = "arial"
         self.window = window
         self.width = width
         self.height = height
@@ -68,36 +72,59 @@ class WeatherTile(Tile):
         self.setupLayout()
 
     def setupLayout(self):
-        self.highLabel.set(self.getHigh())
-        self.lowLabel.set(self.getLow())
         self.currentLabel.set(self.getCurrentTemp())
+        self.highLabel.set("High: " + self.getHigh())
+        self.lowLabel.set("Low: " + self.getLow())
+        
 
         for i in range(0,6):
             self.setHourlyTemp(i)
+        new_image = self.getImage()
+
+        self.l1 = Label(self.frame, image=new_image)
+        self.l1.image = new_image
+        self.l1.pack(side="left")
         
-        Label(self.frame, textvariable=self.highLabel, bg=self.color, fg=self.forColor).pack(pady=4)
-        Label(self.frame, textvariable=self.lowLabel, bg=self.color, fg=self.forColor).pack()
-        Label(self.frame, textvariable=self.currentLabel, bg=self.color, fg=self.forColor).pack()
-        Label(self.frame, textvariable=self.hourlyTemps[0], bg=self.color, fg=self.forColor).pack()
-        Label(self.frame, textvariable=self.hourlyTemps[1], bg=self.color, fg=self.forColor).pack()
-        Label(self.frame, textvariable=self.hourlyTemps[2], bg=self.color, fg=self.forColor).pack()
-        Label(self.frame, textvariable=self.hourlyTemps[3], bg=self.color, fg=self.forColor).pack()
-        Label(self.frame, textvariable=self.hourlyTemps[4], bg=self.color, fg=self.forColor).pack()
-        Label(self.frame, textvariable=self.hourlyTemps[5], bg=self.color, fg=self.forColor).pack()
+        Label(self.frame, textvariable=self.currentLabel, font=(self.fontType, 35), bg=self.color, fg=self.forColor).pack()
+        Label(self.frame, textvariable=self.highLabel, font=(self.fontType, self.fontSize), bg=self.color, fg=self.forColor).pack(pady=4)
+        Label(self.frame, textvariable=self.lowLabel, font=(self.fontType, self.fontSize), bg=self.color, fg=self.forColor).pack()
+        
+
+        for i in range(0, 6):
+            Label(self.frame, textvariable=self.hourlyTemps[i], font=(self.fontType, self.fontSize), bg=self.color, fg=self.forColor).pack()
+
         print(self.getHourData(1))
 
     def getHigh(self):
-        return self.weatherData["forecast"]["forecastday"][0]["day"]["maxtemp_f"]
+        return str(round(self.weatherData["forecast"]["forecastday"][0]["day"]["maxtemp_f"])) + " °F"
 
     def getLow(self):
-        return self.weatherData["forecast"]["forecastday"][0]["day"]["mintemp_f"]
+        return str(round(self.weatherData["forecast"]["forecastday"][0]["day"]["mintemp_f"])) + " °F"
 
     def getCurrentTemp(self):
-        return self.weatherData["current"]["temp_f"]
+        return str(round(self.weatherData["current"]["temp_f"])) + " °F"
 
     def getHourData(self, offsetFromCurrentHour):
         #currentTime = datetime.datetime().today().hour
         return self.weatherData["forecast"]["forecastday"][0]["hour"][(12) + offsetFromCurrentHour]
+
+    def getImage(self):
+        imageLink = "http:" + self.weatherData["current"]["condition"]["icon"]
+
+        # raw_data = urllib.request.urlopen(imageLink)
+        # image = Image.open(io.BytesIO(raw_data))
+
+
+
+
+        # link = urllib.request(imageLink)
+        # raw_data = urllib.urlopen(link)
+
+        raw_data = urllib.request.urlopen(imageLink).read()
+        im = Image.open(io.BytesIO(raw_data))
+        img_size = int((self.width / self.columns) * .3)
+        im = im.resize((img_size, img_size))
+        return ImageTk.PhotoImage(im)
 
     def setHourlyTemp(self, offset):
         offset = offset - 1
@@ -119,6 +146,8 @@ class SpotifyTile(Tile):
         self.title = "Spotify"
         self.color = "black"
         self.forColor = "green"
+        self.fontSize = 18
+        self.fontType = "arial"
         self.songLabel = tk.StringVar()
         self.songLabel.set("")
         self.artistLabel = tk.StringVar()
@@ -154,8 +183,8 @@ class SpotifyTile(Tile):
         self.coverArt = Label(self.frame, image=new_image)
         self.coverArt.image = new_image
         self.coverArt.pack()
-        Label(self.frame, textvariable=self.songLabel, bg=self.color, fg=self.forColor).pack(pady=4)
-        Label(self.frame, textvariable=self.artistLabel, bg=self.color, fg=self.forColor).pack()
+        Label(self.frame, textvariable=self.songLabel, font=(self.fontType, self.fontSize), bg=self.color, fg=self.forColor).pack(pady=4)
+        Label(self.frame, textvariable=self.artistLabel, font=(self.fontType, self.fontSize), bg=self.color, fg=self.forColor).pack()
         # self.progBar = ttk.Progressbar(
         #     self.frame,
         #     orient="horizontal",
@@ -198,6 +227,8 @@ class PhotoTile(Tile):
         self.title = "Photos"
         self.color = "white"
         self.forColor = "black"
+        self.fontSize = 18
+        self.fontType = "arial"
         self.dateLabel = tk.StringVar()
         self.dateLabel.set("")
         self.window = window
@@ -221,7 +252,7 @@ class PhotoTile(Tile):
         self.l1 = Label(self.frame, image=new_image)
         self.l1.image = new_image
         self.l1.pack()
-        Label(self.frame, textvariable=self.dateLabel, bg=self.color, fg=self.forColor).pack()
+        Label(self.frame, textvariable=self.dateLabel, font=(self.fontType, self.fontSize), bg=self.color, fg=self.forColor).pack()
 
     #def elapsedTime(self):
         #if datetime.datetime.now().time() - self.startTime >= 

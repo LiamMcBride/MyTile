@@ -6,8 +6,11 @@ import time
 
 class GUI():
     def __init__(self):
-        self.width = 1200
-        self.height = 800
+        # self.width = 1200
+        # self.height = 800
+        ratio = 1.5 #16/9 #2.38 #1.5 is og
+        self.width = 1800
+        self.height = int(self.width / ratio)
 
         self.rows = 2
         self.columns = 3

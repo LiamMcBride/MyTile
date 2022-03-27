@@ -10,8 +10,8 @@ import PIL.Image as PILImage
 from PIL import ImageTk
 import datetime
 
-#CLIENT_SECRET_FILE = "C:/Users/liamm/Desktop/MyTile/API/credentials.json"
-CLIENT_SECRET_FILE = "C:/Users/liamm/OneDrive/Desktop/MyTile/API/credentials.json"
+CLIENT_SECRET_FILE = "C:/Users/liamm/Desktop/MyTile/API/credentials.json"
+#CLIENT_SECRET_FILE = "C:/Users/liamm/OneDrive/Desktop/MyTile/API/credentials.json"
 
 ALBUM_NAME = "MyTile Album"
 
@@ -73,7 +73,7 @@ class PhotosAPI():
         self.photos = []
 
         for url in self.base_urls:
-            image_url = "{}=w275-h300".format(url)
+            image_url = "{}".format(url)
             image_bytes = urlopen(image_url).read()
             self.photos.append(PILImage.open(io.BytesIO(image_bytes)))
     

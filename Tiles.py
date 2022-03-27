@@ -147,7 +147,8 @@ class SpotifyTile(Tile):
         self.songLabel.set(self.currentSong)
         self.artistLabel.set(self.currentArtist)
         img = Image.open("image.png")
-        resized_image= img.resize((250, 250))
+        img_size = int((self.width / self.columns) * .625)
+        resized_image= img.resize((img_size, img_size))
         new_image= ImageTk.PhotoImage(resized_image)
         self.finished_image = new_image
         self.coverArt = Label(self.frame, image=new_image)
@@ -170,7 +171,8 @@ class SpotifyTile(Tile):
         if(self.imageLink != "None"):
             raw_data = urllib.request.urlopen(self.imageLink).read()
             im = Image.open(io.BytesIO(raw_data))
-            im = im.resize((250, 250))
+            img_size = int((self.width / self.columns) * .625)
+            im = im.resize((img_size, img_size))
             self.finished_image = ImageTk.PhotoImage(im)
 
     def updateProgBar(self):
@@ -229,7 +231,10 @@ class PhotoTile(Tile):
         dates = self.api.getDates()
         while(1 == 1):
             time.sleep(5)
-            new_image = ImageTk.PhotoImage(self.photos[counter])
+            img_size = int((self.width / self.columns) * .625)
+            ratio = img_size / self.photos[counter].size[0]
+            im = self.photos[counter].resize((img_size, int(self.photos[counter].size[1] * ratio)))
+            new_image = ImageTk.PhotoImage(im)
             self.l1.configure(image=new_image)
             self.l1.image = new_image
             self.dateLabel.set(dates[counter])

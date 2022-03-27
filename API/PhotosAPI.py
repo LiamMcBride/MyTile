@@ -10,8 +10,8 @@ import PIL.Image as PILImage
 from PIL import ImageTk
 import datetime
 
-CLIENT_SECRET_FILE = "C:/Users/liamm/Desktop/MyTile/API/credentials.json"
-#CLIENT_SECRET_FILE = "C:/Users/liamm/OneDrive/Desktop/MyTile/API/credentials.json"
+#CLIENT_SECRET_FILE = "C:/Users/liamm/Desktop/MyTile/API/credentials.json"
+CLIENT_SECRET_FILE = "C:/Users/liamm/OneDrive/Desktop/MyTile/API/credentials.json"
 
 ALBUM_NAME = "MyTile Album"
 

@@ -1,17 +1,17 @@
 import requests
 import json
 
-api_key = "?key=d98410f070754f77a40205826222603"
+class WeatherAPI():
+    def __init__(self):
+        self.api_key = "?key=d98410f070754f77a40205826222603"
+        self.base_url = "http://api.weatherapi.com/v1"
+        self.request_type = "forecast.json"
+        self.zip_code = "24060"
 
-base_url = "http://api.weatherapi.com/v1"
+    def getWeatherData(self):
+        request_url = self.base_url + "/" + self.request_type + self.api_key + "&q=" + self.zip_code + "&days=1"
+        return requests.get(request_url).json()
 
-request_type = "forecast.json"
+api = WeatherAPI()
 
-zip_code = "27519"
-
-request_url = base_url + "/" + request_type + api_key + "&q=" + zip_code + "&days=7"
-
-response = requests.get(request_url)
-parsed = json.loads(response)
-
-print(json.dumps(parsed, indent=4, sort_keys =True))
+print(api.getWeatherData())

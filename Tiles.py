@@ -4,6 +4,7 @@ from tkinter import ttk
 from PIL import Image,ImageTk
 from API.PhotosAPI import PhotosAPI
 from API.SpotifyAPI.SpotifyAPI import SpotifyAPI
+from API.WeatherAPI.WeatherAPI import WeatherAPI
 import threading
 import time
 import datetime
@@ -45,7 +46,7 @@ class Tile():
         label.pack(padx=6, pady=10)
 
 class WeatherTile(Tile):
-    
+    #I want to dynamically change the background color to reflect time of day/weather
     def __init__(self, window, width, height, row, column, rows, columns):
         self.window = window
         self.width = width
@@ -57,7 +58,58 @@ class WeatherTile(Tile):
         self.title = "Weather"
         self.color = "blue"
         self.forColor = "black"
+        self.highLabel = tk.StringVar()
+        self.lowLabel = tk.StringVar()
+        self.hourlyTemps = [None, None, None, None, None, None] #holds siz string var
+        self.currentLabel = tk.StringVar()
+        self.api = WeatherAPI()
+        self.weatherData = self.api.getWeatherData()
         self.setup()
+        self.setupLayout()
+
+    def setupLayout(self):
+        self.highLabel.set(self.getHigh())
+        self.lowLabel.set(self.getLow())
+        self.currentLabel.set(self.getCurrentTemp())
+
+        for i in range(0,6):
+            self.setHourlyTemp(i)
+        
+        Label(self.frame, textvariable=self.highLabel, bg=self.color, fg=self.forColor).pack(pady=4)
+        Label(self.frame, textvariable=self.lowLabel, bg=self.color, fg=self.forColor).pack()
+        Label(self.frame, textvariable=self.currentLabel, bg=self.color, fg=self.forColor).pack()
+        Label(self.frame, textvariable=self.hourlyTemps[0], bg=self.color, fg=self.forColor).pack()
+        Label(self.frame, textvariable=self.hourlyTemps[1], bg=self.color, fg=self.forColor).pack()
+        Label(self.frame, textvariable=self.hourlyTemps[2], bg=self.color, fg=self.forColor).pack()
+        Label(self.frame, textvariable=self.hourlyTemps[3], bg=self.color, fg=self.forColor).pack()
+        Label(self.frame, textvariable=self.hourlyTemps[4], bg=self.color, fg=self.forColor).pack()
+        Label(self.frame, textvariable=self.hourlyTemps[5], bg=self.color, fg=self.forColor).pack()
+        print(self.getHourData(1))
+
+    def getHigh(self):
+        return self.weatherData["forecast"]["forecastday"][0]["day"]["maxtemp_f"]
+
+    def getLow(self):
+        return self.weatherData["forecast"]["forecastday"][0]["day"]["mintemp_f"]
+
+    def getCurrentTemp(self):
+        return self.weatherData["current"]["temp_f"]
+
+    def getHourData(self, offsetFromCurrentHour):
+        #currentTime = datetime.datetime().today().hour
+        return self.weatherData["forecast"]["forecastday"][0]["hour"][(12) + offsetFromCurrentHour]
+
+    def setHourlyTemp(self, offset):
+        offset = offset - 1
+        hourlyTemp = self.getHourData(offset + 1)["temp_f"]
+
+        if(self.hourlyTemps[offset] == None):
+            self.hourlyTemps[offset] = tk.StringVar()
+        
+        self.hourlyTemps[offset].set(hourlyTemp)
+
+
+    
 
         
 

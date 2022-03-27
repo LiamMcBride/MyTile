@@ -15,7 +15,9 @@ class GUI():
 
         self.window = tk.Tk()
         
-        weather = WeatherTile(self.window, self.width, self.height, 0, 0, 2, 3)
+        # weather = WeatherTile(self.window, self.width, self.height, 0, 0, 2, 3)
+
+        threading.Thread(target=self.weather_thread).start()
 
         #spotify = SpotifyTile(self.window, self.width, self.height, 0, 1, 2, 3)
         threading.Thread(target=self.spotify_thread).start()
@@ -47,6 +49,9 @@ class GUI():
     
     def spotify_thread(self):
         spotify = SpotifyTile(self.window, self.width, self.height, 0, 1, 2, 3)
+    
+    def weather_thread(self):
+        weather = WeatherTile(self.window, self.width, self.height, 0, 0, 2, 3)
 
     def makeFrame(self, color):
         
